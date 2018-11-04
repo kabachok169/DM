@@ -1,29 +1,37 @@
-.header {
-    height: 100px;
-    color: white;
-    font-size: 2em;
-    &__info {
-        margin-top: 40px;
-        text-align: center;
-    }
-
-}
-
-.table-cell {
-    text-align: center
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
 }
 
 .main {
-    width: 90%;
-    margin-left: 5%;
-    margin-top: 40px;
-    min-width: 800px;
-    background-color: rgb(240, 240, 240);
-    padding: 30px;
-    border-radius: 8px;
-    opacity: 0.9;
-}
+    width: 50%;
+    height: 50%;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-.header-grid {
-    margin-bottom: 30px;
+    &__header {
+        font-size: 50px;
+        height: 150px;
+        margin-top: 50px;
+    }
+
+    &__button-group {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 200px;
+
+        &-item {
+            align-self: center;
+            font-size: 30px;
+            height: 60px;
+            min-width: 200px;
+        }
+    }
 }
