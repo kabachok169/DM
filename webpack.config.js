@@ -28,7 +28,7 @@ module.exports = {
     devServer: {
         contentBase: '/dist',
         host: 'localhost',
-        port: 8080,
+        port: 8083,
         watchOptions: {
             poll: true
         }
