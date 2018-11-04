@@ -1,0 +1,69 @@
+.authorized {
+    height: 100vh;
+
+    &__logo {
+        height: 40px;
+        width: 46px;
+        background-color: rgb(201, 200, 200);
+        background-image: url('../../../static/woman.png');
+        margin: 10px auto 10px;
+        cursor: pointer;
+    }
+
+    &__header {
+        background-color: white;
+        padding: 0;
+        // position: fixed;
+        // width: 100%;
+        &-company {
+            font-size: 32px;
+            text-align: center;
+        }
+    }
+
+    &__menu {
+        &-trigger {
+            font-size: 18px;
+            line-height: 64px;
+            padding: 0 24px;
+            cursor: pointer;
+            transition: color .3s;
+
+            &:hover {
+                color: #1890ff;
+            }
+        }
+    }
+
+    &__content {
+        margin: 24px 16px;
+        margin-top: 40px;
+        padding: 24;
+        background-color: white;
+
+        &__text {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            margin-top: 1050px;
+
+            &-value {
+                font-size: 40px;
+                margin: auto;
+            }
+        }
+    }
+
+    &__footer {
+        text-align: center;
+        &__value {
+            text-align: center;
+        }
+    }
+}
+
+.ant-menu-vertical > .ant-menu-item, .ant-menu-vertical-left > .ant-menu-item, .ant-menu-vertical-right > .ant-menu-item, .ant-menu-inline > .ant-menu-item, .ant-menu-vertical > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-vertical-left > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-vertical-right > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline > .ant-menu-submenu > .ant-menu-submenu-title {
+    line-height: 60px;
+    height: 60px;
+}
+

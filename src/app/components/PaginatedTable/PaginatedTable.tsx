@@ -1,32 +1,71 @@
 import * as React from 'react';
 
-import { Table } from 'antd';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+
+import { Table, Button } from 'antd';
+
+import './PaginatedTable.scss';
 
 const columns = [{
   title: 'Name',
   dataIndex: 'name',
 }, {
-  title: 'Age',
-  dataIndex: 'age',
+  title: 'E-mail',
+  dataIndex: 'email',
 }, {
-  title: 'Address',
-  dataIndex: 'address',
+  title: 'Telephone number',
+  dataIndex: 'number',
 }];
 
-const data = [];
+let data = [];
 for (let i = 0; i < 46; i++) {
   data.push({
     key: i,
-    name: `Edward King ${i}`,
-    age: 32,
-    address: `London, Park Lane no. ${i}`,
+    name: `Egor ${i}`,
+    email: `example${i}@govgoogle.com`,
+    number: `8-123-123-12-12`,
   });
 }
 
-class App extends React.Component {
+interface IProps {
+    columns?: Array<string>;
+    totalData?: number;
+    data?: Array<any>;
+}
+
+interface IState {
+    selectedRowKeys: Array<number>;
+    loading: boolean;
+    data: Array<any>;
+}
+
+class PaginatedTable extends React.Component<IProps, IState> {
   state = {
     selectedRowKeys: [], // Check here to configure the default column
+    loading: false,
+    data: data
   };
+
+  start = () => {
+    this.setState({ loading: true });
+    // ajax request after empty completing
+    const newData = this.state.data;
+    this.state.data.forEach((item, key) => {
+        if (this.state.selectedRowKeys.includes(key)) {
+            console.log(key);
+            newData.splice(key, 1);
+        }
+    });
+    console.log(newData);
+    setTimeout(() => {
+      this.setState({
+        selectedRowKeys: [],
+        loading: false,
+        data: newData
+      });
+    }, 1000);
+  }
 
   onSelectChange = (selectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
@@ -34,51 +73,42 @@ class App extends React.Component {
   }
 
   render() {
-    const { selectedRowKeys } = this.state;
+    const { loading, selectedRowKeys } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.onSelectChange,
-      hideDefaultSelections: true,
-      selections: [{
-        key: 'all-data',
-        text: 'Select All Data',
-        onSelect: () => {
-          this.setState({
-            selectedRowKeys: [...Array(46).keys()], // 0...45
-          });
-        },
-      }, {
-        key: 'odd',
-        text: 'Select Odd Row',
-        onSelect: (changableRowKeys) => {
-          let newSelectedRowKeys = [];
-          newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-            if (index % 2 !== 0) {
-              return false;
-            }
-            return true;
-          });
-          this.setState({ selectedRowKeys: newSelectedRowKeys });
-        },
-      }, {
-        key: 'even',
-        text: 'Select Even Row',
-        onSelect: (changableRowKeys) => {
-          let newSelectedRowKeys = [];
-          newSelectedRowKeys = changableRowKeys.filter((key, index) => {
-            if (index % 2 !== 0) {
-              return true;
-            }
-            return false;
-          });
-          this.setState({ selectedRowKeys: newSelectedRowKeys });
-        },
-      }],
-      onSelection: this.onSelectChange,
     };
-
+    const hasSelected = selectedRowKeys.length > 0;
+    
     return (
-      <Table rowSelection={rowSelection} columns={columns} dataSource={data} />
+      <div>
+        <div style={{ marginBottom: 16 }}>
+          <Button
+            type="primary"
+            onClick={this.start}
+            disabled={!hasSelected}
+            loading={loading}
+          >
+            Delete
+          </Button>
+          <span style={{ marginLeft: 8 }}>
+            {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
+          </span>
+        </div>
+        <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} style={{textAlign: 'center'}} pagination={{position: 'bottom'}} />
+      </div> 
     );
   }
 }
+
+const mapStateToProps: any = (state: any) => {
+    return {
+    };
+};
+
+const mapDispatchToProps: any = (dispatch: any) => {
+    return {
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PaginatedTable);

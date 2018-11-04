@@ -3,7 +3,8 @@ import * as ReactDOM from 'react-dom';
 import App from './app/containers/App/App';
 import {Provider} from 'react-redux';
 import configureStore from './app/store/store';
-import 'semantic-ui-css/semantic.min.css';
+
+import 'antd/dist/antd.css';
 
 const store = configureStore({});
 

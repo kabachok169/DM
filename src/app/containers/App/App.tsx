@@ -3,7 +3,7 @@ import {Router, Route, Switch} from 'react-router';
 import {createBrowserHistory} from 'history';
 import * as PathConstants from '../../constants/PathsConstants';
 
-import MainPage from '../MainPage/MainPage';
+import Authorized from '../Authorized/Authorized';
 
 import '../../../static/main.scss';
 
@@ -14,7 +14,7 @@ export default class App extends React.Component<any, any> {
         return (
             <Router history={ history }>
                 <Switch>
-                    <Route exact path={ PathConstants.MAINPAGE } component={ MainPage } />
+                    <Route exact path={ PathConstants.MAINPAGE } component={ Authorized } />
                 </Switch>
             </Router>
         );
