@@ -11,20 +11,35 @@ const { Header, Footer, Sider, Content } = Layout;
 
 import PaginatedTable from '../PaginatedTable/PaginatedTable';
 
-interface IProps {
+import * as clientsActions from '../../redux/clients/clients.action';
 
+interface IProps {
+    clientsActions?: any;
+    columns?: Array<any>;
+    totalData?: number;
+    data?: Array<any>;
 }
 
 interface IState {
     collapsed: boolean;
     menuItem: string;
+    pageSize?: number;
+    currentPage?: number;
 }
 
 class Clients extends React.Component<IProps, IState> {
-  state = {
-    collapsed: false,
-    menuItem: '1'
-  };
+  constructor(props) {
+    super(props);
+  
+    this.state = {
+      collapsed: false,
+      menuItem: '1',
+      pageSize: 10,
+      currentPage: 1
+    };
+
+    this.paginate = this.paginate.bind(this);
+  }
 
   toggle = () => {
     this.setState({
@@ -32,21 +47,47 @@ class Clients extends React.Component<IProps, IState> {
     });
   }
 
+  paginate = (current) => {
+    console.log('page: ', current);
+    this.setState({
+      currentPage: current
+    });
+    this.props.clientsActions.getClients(current, this.state.pageSize);
+  }
+
+  componentWillMount() {
+    this.props.clientsActions.getClients(this.state.currentPage, this.state.pageSize);
+  }
+
   render() {
+    const {data, columns, totalData} = this.props;
+
+    console.log(data);
+
     return (
-        <PaginatedTable />
+        <PaginatedTable 
+          data={data}
+          columns={columns}
+          totalData={totalData}
+          pageSize={this.state.pageSize}
+          paginate={this.paginate}
+        />
     );
   }
 }
 
 const mapStateToProps: any = (state: any) => {
-    return {
-    };
+  return {
+    data: state.clients.data,
+    columns: state.clients. columns,
+    totalData: state.clients.total
+  };
 };
 
 const mapDispatchToProps: any = (dispatch: any) => {
-    return {
-    };
+  return {
+    clientsActions: bindActionCreators(clientsActions, dispatch)
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Clients);
