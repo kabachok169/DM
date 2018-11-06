@@ -1,4 +1,4 @@
-import { SET_CLIENTS } from "./clients.constants";
+import { SET_CLIENTS, SET_CLIENTS_CARD } from "./clients.constants";
 
 export function setClients(data, columns, total) {
     return {
@@ -36,5 +36,27 @@ export function getClients(currentPage, pageSize) {
         console.log('action: ', data);
 
         return dispatch(setClients(data, columns, 50));
+    };
+}
+
+export function setClientsCard(data) {
+    return {
+        type: SET_CLIENTS_CARD,
+        payload: {
+            info: data
+        }
+    };
+}
+
+export function getClientsCard(key) {
+    return async (dispatch) => {
+          
+        let data = {
+            name: `Egor${key}`,
+            email: `example${key}@govgoogle.com`,
+            number: `8-123-123-12-12`
+        };
+
+        return dispatch(setClientsCard(data));
     };
 }

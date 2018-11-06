@@ -33,6 +33,7 @@ class PaginatedTable extends React.Component<IProps, IState> {
     };
 
     this.handlePaginate = this.handlePaginate.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
   
 
@@ -59,6 +60,10 @@ class PaginatedTable extends React.Component<IProps, IState> {
       currentPage: page
     });
     this.props.paginate(page);
+  };
+
+  onClick = (record) => {
+    alert('wow');
   };
 
   render() {
@@ -89,7 +94,12 @@ class PaginatedTable extends React.Component<IProps, IState> {
         <Table rowSelection={rowSelection}
           columns={columns}
           dataSource={data} style={{textAlign: 'center'}} 
-          pagination={false} />
+          pagination={false} 
+          onRow={(record) => {
+            return {
+              onClick: this.onClick
+            };
+          }}/>
         <Pagination
           current={this.state.currentPage}
           total={totalData}
