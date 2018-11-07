@@ -27,7 +27,7 @@ export function getClients(currentPage, pageSize) {
         for (let i = 0; i < pageSize; i++) {
             data.push({
                 key: i,
-                name: `Egor ${currentPage}`,
+                name: `Egor ${currentPage} + ${i}`,
                 email: `example${i}@govgoogle.com`,
                 number: `8-123-123-12-12`,
             });
@@ -48,7 +48,7 @@ export function setClientsCard(data) {
     };
 }
 
-export function getClientsCard(key) {
+export function getClientsCard(key, data) {
     return async (dispatch) => {
         console.log('key in action: ', key);
         let data = {
