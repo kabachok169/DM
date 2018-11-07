@@ -54,6 +54,9 @@ class PaginatedTable extends React.Component<IProps, IState> {
         }
     });
     console.log(newData);
+    setTimeout(() => {
+      this.setState({ loading: false, selectedRowKeys: [] });
+    }, 1000);
     //TODO: request for delete
   }
 
@@ -128,9 +131,10 @@ class PaginatedTable extends React.Component<IProps, IState> {
           current={this.state.currentPage}
           total={totalData}
           pageSize={pageSize}
-          onChange={this.handlePaginate}/>
+          onChange={this.handlePaginate}
+          style={{marginLeft: '20px', marginTop: '30px'}}/>
         {this.state.cardOpened && <ClientsCard 
-                                    clientKey={this.state.clientKey} 
+                                    clientKey={+this.state.clientKey + (this.state.currentPage - 1) * this.props.pageSize} 
                                     visible={this.state.cardOpened} 
                                     onOk={this.handleOk} 
                                     onCancel={this.handleCancel}/>}
