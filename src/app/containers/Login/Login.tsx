@@ -27,6 +27,7 @@ class Login extends React.Component<IProps, any> {
             console.log('Received values of form: ', values);
           }
         });
+        this.props.history.push('/me');
     }
 
     goBack() {

@@ -3,55 +3,51 @@ import * as React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
-import { Table, Button } from 'antd';
+import { Table, Button, Pagination } from 'antd';
 
 import './PaginatedTable.scss';
+import ClientsCard from '../ClientsCard/ClientsCard';
 
-const columns = [{
-  title: 'Name',
-  dataIndex: 'name',
-}, {
-  title: 'E-mail',
-  dataIndex: 'email',
-}, {
-  title: 'Telephone number',
-  dataIndex: 'number',
-}];
-
-let data = [];
-for (let i = 0; i < 46; i++) {
-  data.push({
-    key: i,
-    name: `Egor ${i}`,
-    email: `example${i}@govgoogle.com`,
-    number: `8-123-123-12-12`,
-  });
-}
 
 interface IProps {
-    columns?: Array<string>;
+    columns?: Array<any>;
     totalData?: number;
     data?: Array<any>;
+    paginate?: any;
+    pageSize?: number;
 }
 
 interface IState {
     selectedRowKeys: Array<number>;
     loading: boolean;
-    data: Array<any>;
+    currentPage: number;
+    cardOpened: boolean;
+    clientKey: number;
 }
 
 class PaginatedTable extends React.Component<IProps, IState> {
-  state = {
-    selectedRowKeys: [], // Check here to configure the default column
-    loading: false,
-    data: data
-  };
+  constructor(props) {
+    super(props);
 
-  start = () => {
+    this.state = {
+      selectedRowKeys: [], // Check here to configure the default column
+      loading: false,
+      currentPage: 1,
+      cardOpened: false,
+      clientKey: -1
+    };
+
+    this.handlePaginate = this.handlePaginate.bind(this);
+    this.onClick = this.onClick.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.handleOk = this.handleOk.bind(this);
+  }
+  
+
+  delete = () => {
     this.setState({ loading: true });
-    // ajax request after empty completing
-    const newData = this.state.data;
-    this.state.data.forEach((item, key) => {
+    const newData = this.props.data;
+    this.props.data.forEach((item, key) => {
         if (this.state.selectedRowKeys.includes(key)) {
             console.log(key);
             newData.splice(key, 1);
@@ -59,18 +55,41 @@ class PaginatedTable extends React.Component<IProps, IState> {
     });
     console.log(newData);
     setTimeout(() => {
-      this.setState({
-        selectedRowKeys: [],
-        loading: false,
-        data: newData
-      });
+      this.setState({ loading: false, selectedRowKeys: [] });
     }, 1000);
+    //TODO: request for delete
   }
 
   onSelectChange = (selectedRowKeys) => {
     console.log('selectedRowKeys changed: ', selectedRowKeys);
     this.setState({ selectedRowKeys });
   }
+
+  handlePaginate = (page, pageSize) => {
+    this.setState({
+      currentPage: page
+    });
+    this.props.paginate(page);
+  };
+
+  onClick = (e) => {
+    this.setState({
+      cardOpened: true,
+      clientKey: e.currentTarget.attributes['data-row-key'].value
+    });
+  };
+
+  handleOk = () => {
+    this.setState({
+      cardOpened: false,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      cardOpened: false,
+    });
+  };
 
   render() {
     const { loading, selectedRowKeys } = this.state;
@@ -79,13 +98,17 @@ class PaginatedTable extends React.Component<IProps, IState> {
       onChange: this.onSelectChange,
     };
     const hasSelected = selectedRowKeys.length > 0;
+
+    const {data, columns, totalData, pageSize} = this.props;
+
+    console.log('key: ', this.state.clientKey);
     
     return (
       <div>
         <div style={{ marginBottom: 16 }}>
           <Button
             type="primary"
-            onClick={this.start}
+            onClick={this.delete}
             disabled={!hasSelected}
             loading={loading}
           >
@@ -95,7 +118,26 @@ class PaginatedTable extends React.Component<IProps, IState> {
             {hasSelected ? `Selected ${selectedRowKeys.length} items` : ''}
           </span>
         </div>
-        <Table rowSelection={rowSelection} columns={columns} dataSource={this.state.data} style={{textAlign: 'center'}} pagination={{position: 'bottom'}} />
+        <Table rowSelection={rowSelection}
+          columns={columns}
+          dataSource={data} style={{textAlign: 'center'}} 
+          pagination={false} 
+          onRow={() => {
+            return {
+              onClick: this.onClick
+            };
+          }}/>
+        <Pagination
+          current={this.state.currentPage}
+          total={totalData}
+          pageSize={pageSize}
+          onChange={this.handlePaginate}
+          style={{marginLeft: '20px', marginTop: '30px'}}/>
+        {this.state.cardOpened && <ClientsCard 
+                                    clientKey={+this.state.clientKey + (this.state.currentPage - 1) * this.props.pageSize} 
+                                    visible={this.state.cardOpened} 
+                                    onOk={this.handleOk} 
+                                    onCancel={this.handleCancel}/>}
       </div> 
     );
   }

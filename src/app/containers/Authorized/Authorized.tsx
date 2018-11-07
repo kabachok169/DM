@@ -6,10 +6,8 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 import './Authorized.scss';
-import { object } from 'prop-types';
 
 import Clients from '../../components/Clients/Clients';
-import { Client } from '_debugger';
 
 const { Header, Footer, Sider, Content } = Layout;
 
