@@ -3,7 +3,8 @@ import {SET_CLIENTS, SET_CLIENTS_CARD} from './clients.constants';
 const initialState = {
     columns: [], 
     data: [],
-    total: 0
+    total: 0,
+    clientsCard: {}
 };
 
 export default function clients(state = initialState, action) {

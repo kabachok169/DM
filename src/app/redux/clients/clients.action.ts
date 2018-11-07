@@ -43,14 +43,14 @@ export function setClientsCard(data) {
     return {
         type: SET_CLIENTS_CARD,
         payload: {
-            info: data
+            clientsCard: data
         }
     };
 }
 
 export function getClientsCard(key) {
     return async (dispatch) => {
-          
+        console.log('key in action: ', key);
         let data = {
             name: `Egor${key}`,
             email: `example${key}@govgoogle.com`,

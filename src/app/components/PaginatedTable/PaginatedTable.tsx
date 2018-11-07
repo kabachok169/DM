@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import { Table, Button, Pagination } from 'antd';
 
 import './PaginatedTable.scss';
+import ClientsCard from '../ClientsCard/ClientsCard';
 
 
 interface IProps {
@@ -20,6 +21,8 @@ interface IState {
     selectedRowKeys: Array<number>;
     loading: boolean;
     currentPage: number;
+    cardOpened: boolean;
+    clientKey: number;
 }
 
 class PaginatedTable extends React.Component<IProps, IState> {
@@ -30,10 +33,14 @@ class PaginatedTable extends React.Component<IProps, IState> {
       selectedRowKeys: [], // Check here to configure the default column
       loading: false,
       currentPage: 1,
+      cardOpened: false,
+      clientKey: -1
     };
 
     this.handlePaginate = this.handlePaginate.bind(this);
     this.onClick = this.onClick.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.handleOk = this.handleOk.bind(this);
   }
   
 
@@ -62,8 +69,23 @@ class PaginatedTable extends React.Component<IProps, IState> {
     this.props.paginate(page);
   };
 
-  onClick = (record) => {
-    alert('wow');
+  onClick = (e) => {
+    this.setState({
+      cardOpened: true,
+      clientKey: e.currentTarget.attributes['data-row-key'].value
+    });
+  };
+
+  handleOk = () => {
+    this.setState({
+      cardOpened: false,
+    });
+  };
+
+  handleCancel = () => {
+    this.setState({
+      cardOpened: false,
+    });
   };
 
   render() {
@@ -75,6 +97,8 @@ class PaginatedTable extends React.Component<IProps, IState> {
     const hasSelected = selectedRowKeys.length > 0;
 
     const {data, columns, totalData, pageSize} = this.props;
+
+    console.log('key: ', this.state.clientKey);
     
     return (
       <div>
@@ -95,7 +119,7 @@ class PaginatedTable extends React.Component<IProps, IState> {
           columns={columns}
           dataSource={data} style={{textAlign: 'center'}} 
           pagination={false} 
-          onRow={(record) => {
+          onRow={() => {
             return {
               onClick: this.onClick
             };
@@ -105,6 +129,11 @@ class PaginatedTable extends React.Component<IProps, IState> {
           total={totalData}
           pageSize={pageSize}
           onChange={this.handlePaginate}/>
+        {this.state.cardOpened && <ClientsCard 
+                                    clientKey={this.state.clientKey} 
+                                    visible={this.state.cardOpened} 
+                                    onOk={this.handleOk} 
+                                    onCancel={this.handleCancel}/>}
       </div> 
     );
   }
